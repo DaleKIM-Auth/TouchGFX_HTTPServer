@@ -284,7 +284,7 @@ static void low_level_init(struct netif *netif)
   memset(&attributes, 0x0, sizeof(osThreadAttr_t));
   attributes.name = "EthIf";
   attributes.stack_size = INTERFACE_THREAD_STACK_SIZE;
-  attributes.priority = osPriorityRealtime;
+  attributes.priority = osPriorityNormal;
   osThreadNew(ethernetif_input, netif, &attributes);
 /* USER CODE END OS_THREAD_NEW_CMSIS_RTOS_V2 */
 
@@ -631,28 +631,20 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef* ethHandle)
     __HAL_RCC_ETH1TX_CLK_ENABLE();
     __HAL_RCC_ETH1RX_CLK_ENABLE();
 
-    __HAL_RCC_GPIOG_CLK_ENABLE();
     __HAL_RCC_GPIOC_CLK_ENABLE();
     __HAL_RCC_GPIOB_CLK_ENABLE();
     __HAL_RCC_GPIOA_CLK_ENABLE();
     /**ETH GPIO Configuration
-    PG11     ------> ETH_TX_EN
     PC1     ------> ETH_MDC
     PB13     ------> ETH_TXD1
     PC5     ------> ETH_RXD1
     PB12     ------> ETH_TXD0
     PA7     ------> ETH_CRS_DV
     PA1     ------> ETH_REF_CLK
+    PB11     ------> ETH_TX_EN
     PA2     ------> ETH_MDIO
     PC4     ------> ETH_RXD0
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_11;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
-    HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
-
     GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_5|GPIO_PIN_4;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -660,7 +652,7 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef* ethHandle)
     GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_12;
+    GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_12|GPIO_PIN_11;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
@@ -696,21 +688,19 @@ void HAL_ETH_MspDeInit(ETH_HandleTypeDef* ethHandle)
     __HAL_RCC_ETH1RX_CLK_DISABLE();
 
     /**ETH GPIO Configuration
-    PG11     ------> ETH_TX_EN
     PC1     ------> ETH_MDC
     PB13     ------> ETH_TXD1
     PC5     ------> ETH_RXD1
     PB12     ------> ETH_TXD0
     PA7     ------> ETH_CRS_DV
     PA1     ------> ETH_REF_CLK
+    PB11     ------> ETH_TX_EN
     PA2     ------> ETH_MDIO
     PC4     ------> ETH_RXD0
     */
-    HAL_GPIO_DeInit(GPIOG, GPIO_PIN_11);
-
     HAL_GPIO_DeInit(GPIOC, GPIO_PIN_1|GPIO_PIN_5|GPIO_PIN_4);
 
-    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_13|GPIO_PIN_12);
+    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_13|GPIO_PIN_12|GPIO_PIN_11);
 
     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_7|GPIO_PIN_1|GPIO_PIN_2);
 

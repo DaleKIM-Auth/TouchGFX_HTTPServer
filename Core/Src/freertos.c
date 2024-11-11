@@ -123,7 +123,8 @@ void StartThread(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    /* Delete the Init Thread */
+    osThreadTerminate(StartHandle);
   }
   /* USER CODE END StartThread */
 }

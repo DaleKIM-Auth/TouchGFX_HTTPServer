@@ -114,9 +114,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
-  printf("LwIP_HTTP_Server_Socket_RTOS\n");
-  printf("STM32H735 board\n");
-  printf("State: Ethernet Initialization ...\n");
+
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -273,6 +271,7 @@ void MPU_Config(void)
   MPU_InitStruct.Number = MPU_REGION_NUMBER2;
   MPU_InitStruct.BaseAddress = 0x30004000;
   MPU_InitStruct.Size = MPU_REGION_SIZE_16KB;
+  MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL1;
   MPU_InitStruct.IsShareable = MPU_ACCESS_SHAREABLE;
   MPU_InitStruct.IsBufferable = MPU_ACCESS_NOT_BUFFERABLE;
 

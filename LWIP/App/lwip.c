@@ -34,9 +34,9 @@
 #include "FreeRTOS.h"
 #include <stdio.h>
 
-#define WEBSERVER_THREAD_PRIO    ( osPriorityAboveNormal )\
+#define WEBSERVER_THREAD_PRIO    ( osPriorityAboveNormal )
 
-
+u32_t nPageHits = 0;
 /* Format of dynamic web page: the page header */
 static const unsigned char PAGE_START[] = {
 0x3c,0x21,0x44,0x4f,0x43,0x54,0x59,0x50,0x45,0x20,0x68,0x74,0x6d,0x6c,0x20,0x50,
@@ -176,12 +176,17 @@ osThreadAttr_t attributes;
 void DynWebPage(int conn)
 {
   portCHAR PAGE_BODY[512];
-  //portCHAR pagehits[10] = {0};
+  portCHAR pagehits[10] = {0};
 
   memset(PAGE_BODY, 0,512);
+
+    /* Update the hit count */
+  nPageHits++;
+  sprintf( pagehits, "%d", (int)nPageHits );
+  strcat(PAGE_BODY, pagehits);
   /* Send the dynamically generated page */
   write(conn, PAGE_START, strlen((char*)PAGE_START));
-  ;
+  write(conn, PAGE_BODY, strlen(PAGE_BODY));
 }
 
 /**
@@ -207,6 +212,7 @@ void http_server_serve(int conn)
   }
 
   /* Close connection socket */
+  shutdown(conn, SHUT_RDWR);
   close(conn);
 }
 
@@ -263,7 +269,7 @@ void MX_LWIP_Init(void)
   IP_ADDRESS[0] = 192;
   IP_ADDRESS[1] = 168;
   IP_ADDRESS[2] = 0;
-  IP_ADDRESS[3] = 25;
+  IP_ADDRESS[3] = 10;
   NETMASK_ADDRESS[0] = 255;
   NETMASK_ADDRESS[1] = 255;
   NETMASK_ADDRESS[2] = 255;
@@ -301,7 +307,7 @@ void MX_LWIP_Init(void)
   memset(&attributes, 0x0, sizeof(osThreadAttr_t));
   attributes.name = "EthLink";
   attributes.stack_size = INTERFACE_THREAD_STACK_SIZE;
-  attributes.priority = osPriorityBelowNormal;
+  attributes.priority = osPriorityNormal;
   osThreadNew(ethernet_link_thread, &gnetif, &attributes);
 
 /* USER CODE END H7_OS_THREAD_NEW_CMSIS_RTOS_V2 */
