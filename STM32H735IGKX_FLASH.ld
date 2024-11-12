@@ -43,12 +43,14 @@ _Min_Stack_Size = 0x1000; /* required amount of stack */
 /* Specify the memory areas */
 MEMORY
 {
-  ITCMRAM (xrw)    : ORIGIN = 0x00000000,   LENGTH = 64K
-  DTCMRAM (xrw)    : ORIGIN = 0x20000000,   LENGTH = 128K
-  FLASH    (rx)    : ORIGIN = 0x08000000,   LENGTH = 1024K
-  RAM_D1  (xrw)    : ORIGIN = 0x24000000,   LENGTH = 320K
-  RAM_D2  (xrw)    : ORIGIN = 0x30000000,   LENGTH = 32K
-  RAM_D3  (xrw)    : ORIGIN = 0x38000000,   LENGTH = 16K
+  ITCMRAM    (xrw)    : ORIGIN = 0x00000000,   LENGTH = 64K
+  DTCMRAM    (xrw)    : ORIGIN = 0x20000000,   LENGTH = 128K
+  FLASH      (rx)     : ORIGIN = 0x08000000,   LENGTH = 1024K
+  RAM_D1     (xrw)    : ORIGIN = 0x24000000,   LENGTH = 320K
+  RAM_D2     (xrw)    : ORIGIN = 0x30000000,   LENGTH = 32K
+  RAM_D3     (xrw)    : ORIGIN = 0x38000000,   LENGTH = 16K
+  OSPI	     (xrw)    : ORIGIN = 0x90000000,   LENGTH = 64M
+  HYPERRAM   (xrw)    : ORIGIN = 0x70000000,   LENGTH = 16M
 }
 
 /* Define output sections */
@@ -196,4 +198,32 @@ SECTIONS
   }
 
   .ARM.attributes 0 : { *(.ARM.attributes) }
+
+  FontFlashSection :
+  {
+    *(FontFlashSection FontFlashSection.*)
+    *(.gnu.linkonce.r.*)
+    . = ALIGN(0x4);
+  } >OSPI
+
+  TextFlashSection :
+  {
+    *(TextFlashSection TextFlashSection.*)
+    *(.gnu.linkonce.r.*)
+    . = ALIGN(0x4);
+  } >OSPI
+
+  ExtFlashSection :
+  {
+    *(ExtFlashSection ExtFlashSection.*)
+    *(.gnu.linkonce.r.*)
+    . = ALIGN(0x4);
+  } >OSPI
+  
+  BufferSection (NOLOAD) :
+  {
+	*(TouchGFX_Framebuffer TouchGFX_Framebuffer.*)
+    *(.gnu.linkonce.r.*)
+    . = ALIGN(0x4);
+  } >HYPERRAM
 }
