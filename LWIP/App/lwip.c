@@ -34,7 +34,7 @@
 #include "FreeRTOS.h"
 #include <stdio.h>
 
-#define WEBSERVER_THREAD_PRIO    ( osPriorityAboveNormal )
+#define WEBSERVER_THREAD_PRIO    ( osPriorityNormal )
 
 u32_t nPageHits = 0;
 /* Format of dynamic web page: the page header */
@@ -180,16 +180,16 @@ void DynWebPage(int conn)
   portCHAR PAGE_BODY[512];
   portCHAR pagehits[10] = {0};
   portCHAR count[10];
-  uint32_t bCount = 0;
-  
+  uint32_t bCount = 0;  
   osStatus_t status;
-
+  
   memset(PAGE_BODY, 0,512);
 
   /* Update the hit count */
   nPageHits++;
   sprintf( pagehits, "%d", (int)nPageHits );
   strcat(PAGE_BODY, pagehits);
+
   strcat((char *) PAGE_BODY, "<pre><br> Count : ");
 
   status = osMessageQueueGet(CounterQueueHandle, &bCount, 0, 0);
