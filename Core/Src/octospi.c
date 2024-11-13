@@ -21,7 +21,7 @@
 #include "octospi.h"
 
 /* USER CODE BEGIN 0 */
-
+#include "stm32h735g_discovery_ospi.h"
 /* USER CODE END 0 */
 
 OSPI_HandleTypeDef hospi1;
@@ -32,7 +32,7 @@ void MX_OCTOSPI1_Init(void)
 {
 
   /* USER CODE BEGIN OCTOSPI1_Init 0 */
-
+  BSP_OSPI_NOR_Init_t ospi_nor_int;
   /* USER CODE END OCTOSPI1_Init 0 */
 
   OSPIM_CfgTypeDef sOspiManagerCfg = {0};
@@ -70,7 +70,18 @@ void MX_OCTOSPI1_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN OCTOSPI1_Init 2 */
-
+  HAL_OSPI_DeInit(&hospi1);
+  ospi_nor_int.InterfaceMode = BSP_OSPI_NOR_OPI_MODE;
+  ospi_nor_int.TransferRate  = BSP_OSPI_NOR_DTR_TRANSFER;
+  BSP_OSPI_NOR_DeInit(0);
+  if(BSP_OSPI_NOR_Init(0, &ospi_nor_int) != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
+  if(BSP_OSPI_NOR_EnableMemoryMappedMode(0) != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
   /* USER CODE END OCTOSPI1_Init 2 */
 
 }
@@ -86,7 +97,8 @@ void MX_OCTOSPI2_Init(void)
   OSPI_HyperbusCfgTypeDef sHyperBusCfg = {0};
 
   /* USER CODE BEGIN OCTOSPI2_Init 1 */
-
+  OSPI_HyperbusCmdTypeDef sCommand = {0};
+  OSPI_MemoryMappedTypeDef sMemMappedCfg = {0};
   /* USER CODE END OCTOSPI2_Init 1 */
   hospi2.Instance = OCTOSPI2;
   hospi2.Init.FifoThreshold = 4;
@@ -126,7 +138,23 @@ void MX_OCTOSPI2_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN OCTOSPI2_Init 2 */
+  sCommand.AddressSpace = HAL_OSPI_MEMORY_ADDRESS_SPACE;
+  sCommand.AddressSize  = HAL_OSPI_ADDRESS_32_BITS;
+  sCommand.DQSMode      = HAL_OSPI_DQS_ENABLE;
+  sCommand.Address      = 0;
+  sCommand.NbData       = 1;
 
+  if (HAL_OSPI_HyperbusCmd(&hospi2, &sCommand, HAL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  sMemMappedCfg.TimeOutActivation = HAL_OSPI_TIMEOUT_COUNTER_DISABLE;
+
+  if (HAL_OSPI_MemoryMapped(&hospi2, &sMemMappedCfg) != HAL_OK)
+  {
+    Error_Handler();
+  }
   /* USER CODE END OCTOSPI2_Init 2 */
 
 }

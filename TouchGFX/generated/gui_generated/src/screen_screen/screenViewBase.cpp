@@ -4,8 +4,10 @@
 #include <gui_generated/screen_screen/screenViewBase.hpp>
 #include <touchgfx/Color.hpp>
 #include <images/BitmapDatabase.hpp>
+#include <texts/TextKeysAndLanguages.hpp>
 
-screenViewBase::screenViewBase()
+screenViewBase::screenViewBase() :
+    buttonCallback(this, &screenViewBase::buttonCallbackHandler)
 {
     __background.setPosition(0, 0, 480, 272);
     __background.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
@@ -14,6 +16,30 @@ screenViewBase::screenViewBase()
     BackGround.setXY(0, 0);
     BackGround.setBitmap(touchgfx::Bitmap(BITMAP_DARK_THEME_IMAGES_BACKGROUNDS_480X272_SUBTLE_SHIFT_ID));
     add(BackGround);
+
+    UpButton.setXY(280, 53);
+    UpButton.setBitmaps(touchgfx::Bitmap(BITMAP_UP_BTN_ID), touchgfx::Bitmap(BITMAP_UP_BTN_ID));
+    UpButton.setAction(buttonCallback);
+    add(UpButton);
+
+    DownButton.setXY(280, 176);
+    DownButton.setBitmaps(touchgfx::Bitmap(BITMAP_DOWN_BTN_ID), touchgfx::Bitmap(BITMAP_DOWN_BTN_PRESSED_ID));
+    DownButton.setAction(buttonCallback);
+    add(DownButton);
+
+    boxWithBorder.setPosition(53, 53, 160, 180);
+    boxWithBorder.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
+    boxWithBorder.setBorderColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    boxWithBorder.setBorderSize(1);
+    add(boxWithBorder);
+
+    CounterText.setPosition(53, 68, 160, 150);
+    CounterText.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    CounterText.setLinespacing(0);
+    Unicode::snprintf(CounterTextBuffer, COUNTERTEXT_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_7VED).getText());
+    CounterText.setWildcard(CounterTextBuffer);
+    CounterText.setTypedText(touchgfx::TypedText(T___SINGLEUSE_H7I6));
+    add(CounterText);
 }
 
 screenViewBase::~screenViewBase()
@@ -24,4 +50,22 @@ screenViewBase::~screenViewBase()
 void screenViewBase::setupScreen()
 {
 
+}
+
+void screenViewBase::buttonCallbackHandler(const touchgfx::AbstractButton& src)
+{
+    if (&src == &UpButton)
+    {
+        //UpButtonInteraction
+        //When UpButton clicked call virtual function
+        //Call PressedUpButton
+        PressedUpButton();
+    }
+    if (&src == &DownButton)
+    {
+        //DownButtonInteraction
+        //When DownButton clicked call virtual function
+        //Call PressedDownButton
+        PressedDownButton();
+    }
 }

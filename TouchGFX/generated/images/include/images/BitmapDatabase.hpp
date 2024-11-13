@@ -7,6 +7,10 @@
 #include <touchgfx/Bitmap.hpp>
 
 const uint16_t BITMAP_DARK_THEME_IMAGES_BACKGROUNDS_480X272_SUBTLE_SHIFT_ID = 0;
+const uint16_t BITMAP_DOWN_BTN_ID = 1;
+const uint16_t BITMAP_DOWN_BTN_PRESSED_ID = 2;
+const uint16_t BITMAP_UP_BTN_ID = 3;
+const uint16_t BITMAP_UP_BTN_PRESSED_ID = 4;
 
 namespace BitmapDatabase
 {

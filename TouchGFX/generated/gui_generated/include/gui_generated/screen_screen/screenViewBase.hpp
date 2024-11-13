@@ -9,6 +9,9 @@
 #include <gui/screen_screen/screenPresenter.hpp>
 #include <touchgfx/widgets/Box.hpp>
 #include <touchgfx/widgets/Image.hpp>
+#include <touchgfx/widgets/Button.hpp>
+#include <touchgfx/widgets/BoxWithBorder.hpp>
+#include <touchgfx/widgets/TextAreaWithWildcard.hpp>
 
 class screenViewBase : public touchgfx::View<screenPresenter>
 {
@@ -16,6 +19,18 @@ public:
     screenViewBase();
     virtual ~screenViewBase();
     virtual void setupScreen();
+
+    /*
+     * Virtual Action Handlers
+     */
+    virtual void PressedUpButton()
+    {
+        // Override and implement this function in screen
+    }
+    virtual void PressedDownButton()
+    {
+        // Override and implement this function in screen
+    }
 
 protected:
     FrontendApplication& application() {
@@ -27,8 +42,28 @@ protected:
      */
     touchgfx::Box __background;
     touchgfx::Image BackGround;
+    touchgfx::Button UpButton;
+    touchgfx::Button DownButton;
+    touchgfx::BoxWithBorder boxWithBorder;
+    touchgfx::TextAreaWithOneWildcard CounterText;
+
+    /*
+     * Wildcard Buffers
+     */
+    static const uint16_t COUNTERTEXT_SIZE = 10;
+    touchgfx::Unicode::UnicodeChar CounterTextBuffer[COUNTERTEXT_SIZE];
 
 private:
+
+    /*
+     * Callback Declarations
+     */
+    touchgfx::Callback<screenViewBase, const touchgfx::AbstractButton&> buttonCallback;
+
+    /*
+     * Callback Handler Declarations
+     */
+    void buttonCallbackHandler(const touchgfx::AbstractButton& src);
 
 };
 

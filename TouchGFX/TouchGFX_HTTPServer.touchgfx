@@ -10,9 +10,86 @@
             "Width": 480,
             "Height": 272,
             "RelativeFilename": "__generated\\dark_theme_images_backgrounds_480x272_subtle_shift.png"
+          },
+          {
+            "Type": "Button",
+            "Name": "UpButton",
+            "X": 280,
+            "Y": 53,
+            "Width": 130,
+            "Height": 56,
+            "Pressed": "up_btn.png",
+            "Released": "up_btn.png"
+          },
+          {
+            "Type": "Button",
+            "Name": "DownButton",
+            "X": 280,
+            "Y": 176,
+            "Width": 130,
+            "Height": 56,
+            "Pressed": "down_btn_pressed.png",
+            "Released": "down_btn.png"
+          },
+          {
+            "Type": "BoxWithBorder",
+            "Name": "boxWithBorder",
+            "X": 53,
+            "Y": 53,
+            "Width": 160,
+            "Height": 180,
+            "BorderColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "BorderSize": 1
+          },
+          {
+            "Type": "TextArea",
+            "Name": "CounterText",
+            "X": 53,
+            "Y": 68,
+            "Width": 160,
+            "Height": 150,
+            "TextId": "__SingleUse_H7I6",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Wildcard1": {
+              "TextId": "__SingleUse_7VED",
+              "UseBuffer": true,
+              "BufferSize": 10
+            }
           }
         ],
-        "Interactions": []
+        "Interactions": [
+          {
+            "InteractionName": "UpButtonInteraction",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "UpButton"
+            },
+            "Action": {
+              "Type": "ActionCustom",
+              "FunctionName": "PressedUpButton"
+            }
+          },
+          {
+            "InteractionName": "DownButtonInteraction",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "DownButton"
+            },
+            "Action": {
+              "Type": "ActionCustom",
+              "FunctionName": "PressedDownButton"
+            }
+          }
+        ]
       }
     ],
     "CustomContainerDefinitions": [],
