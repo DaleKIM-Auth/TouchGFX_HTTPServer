@@ -164,6 +164,7 @@ uint8_t GATEWAY_ADDRESS[4];
 /* USER CODE BEGIN OS_THREAD_ATTR_CMSIS_RTOS_V2 */
 #define INTERFACE_THREAD_STACK_SIZE ( 1024 )
 osThreadAttr_t attributes;
+extern osMessageQueueId_t CounterQueueHandle;
 /* USER CODE END OS_THREAD_ATTR_CMSIS_RTOS_V2 */
 
 /* USER CODE BEGIN 2 */
@@ -173,20 +174,38 @@ osThreadAttr_t attributes;
   * @param  conn connection socket
   * @retval None
   */
+uint32_t CountValue = 0;
 void DynWebPage(int conn)
 {
   portCHAR PAGE_BODY[512];
   portCHAR pagehits[10] = {0};
+  portCHAR count[10];
+  uint32_t bCount = 0;
+  
+  osStatus_t status;
 
   memset(PAGE_BODY, 0,512);
 
-    /* Update the hit count */
+  /* Update the hit count */
   nPageHits++;
   sprintf( pagehits, "%d", (int)nPageHits );
   strcat(PAGE_BODY, pagehits);
+  strcat((char *) PAGE_BODY, "<pre><br> Count : ");
+
+  status = osMessageQueueGet(CounterQueueHandle, &bCount, 0, 0);
+  if(status == osOK){
+    if(CountValue != bCount){
+      CountValue = bCount;  
+    }
+  }
+
+  sprintf( count, "%d", (int)CountValue );
+  strcat(PAGE_BODY, count);    
+
   /* Send the dynamically generated page */
   write(conn, PAGE_START, strlen((char*)PAGE_START));
   write(conn, PAGE_BODY, strlen(PAGE_BODY));
+
 }
 
 /**
@@ -211,8 +230,7 @@ void http_server_serve(int conn)
     DynWebPage(conn);
   }
 
-  /* Close connection socket */
-  shutdown(conn, SHUT_RDWR);
+  /* Close connection socket */  
   close(conn);
 }
 
@@ -307,7 +325,7 @@ void MX_LWIP_Init(void)
   memset(&attributes, 0x0, sizeof(osThreadAttr_t));
   attributes.name = "EthLink";
   attributes.stack_size = INTERFACE_THREAD_STACK_SIZE;
-  attributes.priority = osPriorityNormal;
+  attributes.priority = osPriorityBelowNormal;
   osThreadNew(ethernet_link_thread, &gnetif, &attributes);
 
 /* USER CODE END H7_OS_THREAD_NEW_CMSIS_RTOS_V2 */

@@ -14,6 +14,8 @@ public:
     }
 
     void tick();
+    void AppUpdateCounterValue(int value);
+
 protected:
     ModelListener* modelListener;
 };

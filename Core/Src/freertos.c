@@ -61,6 +61,11 @@ const osThreadAttr_t TouchGFXTask_attributes = {
   .stack_size = 1024 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
+/* Definitions for CounterQueue */
+osMessageQueueId_t CounterQueueHandle;
+const osMessageQueueAttr_t CounterQueue_attributes = {
+  .name = "CounterQueue"
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -94,6 +99,10 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
+
+  /* Create the queue(s) */
+  /* creation of CounterQueue */
+  CounterQueueHandle = osMessageQueueNew (16, sizeof(uint16_t), &CounterQueue_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */

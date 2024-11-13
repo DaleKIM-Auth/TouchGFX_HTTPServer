@@ -26,6 +26,7 @@ public:
     virtual void deactivate();
 
     virtual ~screenPresenter() {}
+    void AppUpdateCounter(uint32_t Cnt);
 
 private:
     screenPresenter();

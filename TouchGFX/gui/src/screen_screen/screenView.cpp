@@ -22,8 +22,9 @@ void screenView::tearDownScreen()
 void screenView::PressedUpButton()
 {
     count = (count++ > UpperLimit) ? UpperLimit : count;
-    Unicode::snprintf(CounterTextBuffer, COUNTERTEXT_SIZE, "%d", count);
+    Unicode::snprintf(CounterTextBuffer, COUNTERTEXT_SIZE, "%d", count);    
     CounterText.invalidate();
+    UpdateCounter(count);
 }
 
 void screenView::PressedDownButton()
@@ -31,4 +32,10 @@ void screenView::PressedDownButton()
     count = (count-- <= LowerLimit) ? LowerLimit : count;
     Unicode::snprintf(CounterTextBuffer, COUNTERTEXT_SIZE, "%d", count);
     CounterText.invalidate();
+    UpdateCounter(count);
+}
+
+void screenView::UpdateCounter(uint32_t Cnt)
+{
+    presenter->AppUpdateCounter(Cnt);
 }

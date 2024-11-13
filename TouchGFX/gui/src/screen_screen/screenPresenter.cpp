@@ -16,3 +16,8 @@ void screenPresenter::deactivate()
 {
 
 }
+
+void screenPresenter::AppUpdateCounter(uint32_t Cnt)
+{
+    model->AppUpdateCounterValue(Cnt);
+}

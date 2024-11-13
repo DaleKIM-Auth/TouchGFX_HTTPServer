@@ -14,7 +14,7 @@ public:
 
     virtual void PressedUpButton();    
     virtual void PressedDownButton();
-    
+    void UpdateCounter(uint32_t Cnt);
 protected:
     uint32_t count;
 };
